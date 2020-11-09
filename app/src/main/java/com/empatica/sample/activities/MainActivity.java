@@ -1,3 +1,4 @@
+
 package com.empatica.sample.activities;
 
 import android.Manifest;
