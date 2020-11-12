@@ -13,6 +13,7 @@ import com.empatica.sample.R;
 import com.empatica.sample.adapter.StudentAdapter;
 import com.empatica.sample.database.RoomDB;
 import com.empatica.sample.models.Student;
+import com.empatica.sample.models.Teacher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,12 @@ public class ClassroomActivity  extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
 
         //Initialize database
-
         database = RoomDB.getInstance(this);
+
+        //getCurrentTeacher
+        if(getIntent().getExtras() != null){
+            Teacher teacher = (Teacher) getIntent().getSerializableExtra("teacher");
+        }
 
         // Store database value in student list
         studentList = database.studentDao().getAll();
@@ -62,7 +67,7 @@ public class ClassroomActivity  extends AppCompatActivity {
                 //Check condition
                 if(!sText.equals("")){
                     //text not empty
-                    //intiliaze student
+                    //initialize student
                     Student student = new Student();
                     //Set text on student
                     student.setFirstName(sText);
