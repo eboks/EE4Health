@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ListNotes">
+    tools:context=".activities.ListNotes">
 
     <EditText
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="604dp"
         android:layout_height="801dp"
