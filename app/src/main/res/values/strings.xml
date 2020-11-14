@@ -10,8 +10,14 @@
     <string name="emptyText">-</string>
     <string name="temp_label">Temperature</string>
     <string name="battery_label">Battery</string>
+
+
+
     <string name="my_profile">My profile</string>
     <string name="my_class">My class</string>
     <string name="manage_class">Manage class</string>
     <string name="add_student">Add student</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>

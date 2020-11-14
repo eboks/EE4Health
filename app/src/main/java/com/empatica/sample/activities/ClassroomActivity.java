@@ -5,7 +5,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClassroomActivity  extends AppCompatActivity {
-
+    private DrawerLayout drawer;
+    Toolbar toolbar;
     EditText editText;
     Button btnAdd, btnReset;
     RecyclerView recyclerView;
@@ -34,10 +39,16 @@ public class ClassroomActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.classroom);
 
-        editText = findViewById(R.id.edit_text);
-        btnAdd = findViewById(R.id.button_add);
-        btnReset = findViewById(R.id.button_reset);
-        recyclerView = findViewById(R.id.recycler_view);
+        initVar();
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle  = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+
 
         //Initialize database
         database = RoomDB.getInstance(this);
@@ -96,5 +107,24 @@ public class ClassroomActivity  extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initVar(){
+        drawer = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        editText = findViewById(R.id.edit_text);
+        btnAdd = findViewById(R.id.button_add);
+        btnReset = findViewById(R.id.button_reset);
+        recyclerView = findViewById(R.id.recycler_view);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 }
