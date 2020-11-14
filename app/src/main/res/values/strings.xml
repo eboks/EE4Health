@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EmpaLink Sample Project</string>
+    <string name="app_name">Stress app</string>
     <string name="accel">Accelerometers</string>
     <string name="accel_x">x:</string>
     <string name="accel_y">y:</string>
@@ -10,4 +10,8 @@
     <string name="emptyText">-</string>
     <string name="temp_label">Temperature</string>
     <string name="battery_label">Battery</string>
+    <string name="my_profile">My profile</string>
+    <string name="my_class">My class</string>
+    <string name="manage_class">Manage class</string>
+    <string name="add_student">Add student</string>
 </resources>
