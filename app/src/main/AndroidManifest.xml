@@ -39,7 +39,7 @@
 
         <activity
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".activities.ClassroomActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>

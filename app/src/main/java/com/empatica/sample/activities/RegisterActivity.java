@@ -8,29 +8,29 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.empatica.sample.R;
 import com.empatica.sample.dao.TeacherDao;
 import com.empatica.sample.database.RoomDB;
 import com.empatica.sample.models.Student;
 import com.empatica.sample.models.Teacher;
+import com.empatica.sample.viewModels.StudentViewModel;
+import com.empatica.sample.viewModels.TeacherViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText firstName, lastName, email, password;
     Button btnLogin, btnRegister;
+    private TeacherViewModel teacherViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
-        firstName = findViewById(R.id.first_name);
-        lastName = findViewById(R.id.last_name);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
+        initVar();
 
-        btnLogin = findViewById(R.id.button_cancel);
-        btnRegister = findViewById(R.id.button_register);
+        teacherViewModel = ViewModelProviders.of(this).get(TeacherViewModel.class);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,12 +42,10 @@ public class RegisterActivity extends AppCompatActivity {
                 teacher.setPassword(password.getText().toString().trim());
 
                 if(validateInput(teacher)){
-                    RoomDB database = RoomDB.getInstance(getApplicationContext());
-                    final TeacherDao teacherdao = database.teacherDao();
+                    teacherViewModel.insert(teacher);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            teacherdao.registerTeacher(teacher);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -79,5 +77,15 @@ public class RegisterActivity extends AppCompatActivity {
         teacher.getPassword().isEmpty()) return false;
 
         return true;
+    }
+
+    private void initVar(){
+        firstName = findViewById(R.id.first_name);
+        lastName = findViewById(R.id.last_name);
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+
+        btnLogin = findViewById(R.id.button_cancel);
+        btnRegister = findViewById(R.id.button_register);
     }
 }

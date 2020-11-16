@@ -8,27 +8,31 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.empatica.sample.R;
 import com.empatica.sample.dao.TeacherDao;
 import com.empatica.sample.database.RoomDB;
 import com.empatica.sample.models.Teacher;
+import com.empatica.sample.viewModels.TeacherViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText email, password;
     Button btnLogin, btnRegister;
 
+    private TeacherViewModel teacherViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
 
-        btnLogin = findViewById(R.id.button_login);
-        btnRegister = findViewById(R.id.button_register);
+        initVar();
+
+     //   teacherViewModel = ViewModelProviders.of(this).get(TeacherViewModel.class);
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                             } else {
-                                Intent intent = new Intent(LoginActivity.this, ClassroomActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra("teacher", teacher);
                                 startActivity(intent);
 
@@ -73,6 +77,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initVar(){
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+
+        btnLogin = findViewById(R.id.button_login);
+        btnRegister = findViewById(R.id.button_register);
     }
 
 }

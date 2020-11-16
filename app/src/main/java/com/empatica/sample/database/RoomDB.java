@@ -2,10 +2,13 @@ package com.empatica.sample.database;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.empatica.sample.dao.StudentDao;
 import com.empatica.sample.dao.TeacherDao;
@@ -13,7 +16,7 @@ import com.empatica.sample.models.Student;
 import com.empatica.sample.models.Teacher;
 
 
-@Database(entities = {Teacher.class, Student.class}, version = 3, exportSchema = false)
+@Database(entities = {Teacher.class, Student.class}, version = 5, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
     private static RoomDB database;
     private static String DATABASE_NAME = "database";
@@ -24,9 +27,35 @@ public abstract class RoomDB extends RoomDatabase {
                     RoomDB.class, DATABASE_NAME)
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
+                    .addCallback(roomCallback)
                     .build();
         }
         return database;
+    }
+
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateDbAsyncTask(database).execute();
+        }
+    };
+
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void>{
+        private StudentDao studentDao;
+
+        private PopulateDbAsyncTask(RoomDB db){
+            studentDao = db.studentDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            studentDao.insert(new Student("John", "McLaren"));
+            studentDao.insert(new Student("Bart", "Meeuws"));
+            studentDao.insert(new Student("Kurt", "Dericksen"));
+            return null;
+        }
+
     }
 
     public abstract TeacherDao teacherDao();

@@ -2,6 +2,7 @@ package com.empatica.sample.dao;
 
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -30,7 +31,10 @@ public interface StudentDao {
     void update(Student student);
 
     @Query("SELECT * FROM student")
-    List<Student> getAll();
+    LiveData<List<Student>> getAllStudents();
+
+    @Query("DELETE FROM student")
+    void deleteAllStudents();
 
     @Query("UPDATE student SET first_name = :sText WHERE ID = :sID")
     void update(int sID, String sText);

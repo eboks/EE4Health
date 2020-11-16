@@ -23,6 +23,9 @@ public class Teacher implements Serializable {
     @ColumnInfo(name="first_name")
     private String firstName;
 
+    @ColumnInfo(name="last_name")
+    private String lastName;
+
     public String getEmail() {
         return email;
     }
@@ -39,8 +42,6 @@ public class Teacher implements Serializable {
         this.password = password;
     }
 
-    @ColumnInfo(name="last_name")
-    private String lastName;
 
     public void setId(int id) {
         this.id = id;

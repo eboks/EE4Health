@@ -21,8 +21,13 @@ public class Student implements Serializable {
     @ColumnInfo(name="first_name")
     private String firstName;
 
-   // @ColumnInfo(name="last_name")
-    //private String lastName;
+    @ColumnInfo(name="last_name")
+    private String lastName;
+
+    public Student(String firstName, String lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -40,11 +45,11 @@ public class Student implements Serializable {
         this.firstName = firstName;
     }
 
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public void setLastName(String lastName) {
-//        this.lastName = lastName;
-//    }
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }
