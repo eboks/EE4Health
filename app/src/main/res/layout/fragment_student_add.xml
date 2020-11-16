@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add student"
+            android:textStyle="bold"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:layout_margin="20sp"/>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First name"
+            android:inputType="text"
+            android:id="@+id/edit_text_first_name"
+            android:layout_margin="20sp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last name"
+            android:inputType="text"
+            android:id="@+id/edit_text_last_name"
+            android:layout_margin="20sp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

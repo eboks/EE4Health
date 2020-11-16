@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.empatica.sample.R;
 import com.empatica.sample.database.RoomDB;
+import com.empatica.sample.fragments.AddStudentFragment;
 import com.empatica.sample.fragments.ClassroomFragment;
 import com.empatica.sample.fragments.SettingsFragment;
 import com.empatica.sample.fragments.TeacherFragment;
@@ -149,7 +150,8 @@ RoomDB database;
                         new TeacherFragment()).commit();
                 break;
             case R.id.nav_add_person:
-                Toast.makeText(this, "Testing", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new AddStudentFragment()).commit();
                 break;
         }
         return true;
