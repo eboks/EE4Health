@@ -125,6 +125,10 @@ RoomDB database;
 
     @Override
     public void onBackPressed() {
+        if ( getFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getFragmentManager().popBackStack();
+        }
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -152,6 +156,7 @@ RoomDB database;
             case R.id.nav_add_person:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new AddStudentFragment()).commit();
+                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         return true;
