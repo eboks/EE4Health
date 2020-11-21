@@ -2,4 +2,42 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation_design" />
+    android:id="@+id/navigation_design"
+    app:startDestination="@id/nav_classroom">
+    <fragment
+        android:id="@+id/nav_classroom"
+        android:name="com.empatica.sample.fragments.ClassroomFragment"
+        android:label="ClassroomFragment" >
+        <action
+            android:id="@+id/action_nav_classroom_to_studentOverviewFragment"
+            app:destination="@id/student_card" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.empatica.sample.fragments.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/nav_myprofile"
+        android:name="com.empatica.sample.fragments.TeacherFragment"
+        android:label="TeacherFragment" />
+    <fragment
+        android:id="@+id/nav_add_person"
+        android:name="com.empatica.sample.fragments.AddStudentFragment"
+        android:label="AddStudentFragment" />
+    <fragment
+        android:id="@+id/student_card"
+        android:name="com.empatica.sample.fragments.StudentOverviewFragment"
+        android:label="StudentOverviewFragment" >
+        <action
+            android:id="@+id/action_studentOverviewFragment_to_studentNotesFragment"
+            app:destination="@id/studentNotesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentNotesFragment"
+        android:name="com.empatica.sample.fragments.StudentNotesFragment"
+        android:label="StudentNotesFragment" >
+        <action
+            android:id="@+id/action_studentNotesFragment_to_studentOverviewFragment"
+            app:destination="@id/student_card" />
+    </fragment>
+</navigation>

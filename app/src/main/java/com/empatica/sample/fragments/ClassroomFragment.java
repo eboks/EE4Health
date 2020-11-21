@@ -1,14 +1,17 @@
 package com.empatica.sample.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,14 +22,18 @@ import com.empatica.sample.adapter.StudentAdapter;
 import com.empatica.sample.models.Student;
 import com.empatica.sample.viewModels.StudentViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ClassroomFragment extends Fragment {
+import static android.content.ContentValues.TAG;
 
+public class ClassroomFragment extends Fragment implements StudentAdapter.OnStudentListener  {
+    private List<Student> students = new ArrayList<Student>();
     private StudentViewModel studentViewModel;
     private View classroomView;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+    private StudentAdapter studentAdapter;
 
 
     @Nullable
@@ -38,7 +45,7 @@ public class ClassroomFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        final StudentAdapter studentAdapter = new StudentAdapter();
+        studentAdapter = new StudentAdapter(this::onStudentClick);
         recyclerView.setAdapter(studentAdapter);
 
 
@@ -51,5 +58,17 @@ public class ClassroomFragment extends Fragment {
             }
         });
         return classroomView;
+    }
+
+    @Override
+    public void onStudentClick(int position) {
+        StudentOverviewFragment fragment = new StudentOverviewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", studentAdapter.getStudentAt(position).getId());
+        Log.d(TAG,"CLICKED"+studentAdapter.getStudentAt(position).getId());
+
+
+        fragment.setArguments(bundle);
+
     }
 }

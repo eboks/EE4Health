@@ -16,8 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.empatica.sample.R;
+import com.empatica.sample.database.RoomDB;
+import com.empatica.sample.models.Student;
+import com.empatica.sample.viewModels.StudentViewModel;
 
 public class AddStudentFragment extends Fragment {
     public static final String EXTRA_FIRSTNAME =
@@ -28,6 +32,7 @@ public class AddStudentFragment extends Fragment {
     private Button btnAdd, btnCancel;
     private View addStudentView;
     private EditText editTextFirstName, editTextLastName;
+    private StudentViewModel studentViewModel;
 
 
     @Nullable
@@ -36,17 +41,12 @@ public class AddStudentFragment extends Fragment {
         addStudentView = inflater.inflate(R.layout.fragment_student_add, container, false);
         initVar();
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-
-        ((AppCompatActivity)getActivity()).setTitle("Add student");
-
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addStudent();
             }
         });
-
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,18 +67,16 @@ public class AddStudentFragment extends Fragment {
             Toast.makeText(getContext(), "Please insert a first name and last name.",Toast.LENGTH_SHORT ).show();
             return;
         }
+        Student student = new Student(firstName, lastName);
+        studentViewModel.insert(student);
+        getActivity().onBackPressed();
 
-        Intent data = new Intent();
-        data.putExtra(EXTRA_FIRSTNAME, firstName);
-        data.putExtra(EXTRA_LASTNAME, lastName);
-
-        ((AppCompatActivity)getActivity()).setResult(Activity.RESULT_OK, data);
-        ((AppCompatActivity)getActivity()).finish();
     }
 
 
 
     private void initVar(){
+        studentViewModel = ViewModelProviders.of(this).get(StudentViewModel.class);
         btnAdd = addStudentView.findViewById(R.id.button_add_student);
         btnCancel = addStudentView.findViewById(R.id.button_cancel);
         editTextFirstName = addStudentView.findViewById(R.id.edit_text_first_name);

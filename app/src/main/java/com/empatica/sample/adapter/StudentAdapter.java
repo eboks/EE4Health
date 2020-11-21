@@ -22,10 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHolder> {
-    private List<Student> students = new ArrayList<Student>();
+    protected List<Student> students = new ArrayList<Student>();
     private Activity context;
     private RoomDB database;
+    private OnStudentListener mOnStudentListener;
 
+
+    public StudentAdapter( OnStudentListener onStudentListener){
+        this.mOnStudentListener = onStudentListener;
+
+    }
 
 
     @NonNull
@@ -36,7 +42,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                 .inflate(R.layout.student,parent, false);
 
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, mOnStudentListener);
     }
 
     @Override
@@ -69,16 +75,32 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public Student getStudentAt(int position){
+        return students.get(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textViewFirstName;
         ImageView btnEdit, btnDelete;
+        OnStudentListener onStudentListener;
 
-        public ViewHolder(@NonNull View itemView){
+        public ViewHolder(@NonNull View itemView, OnStudentListener onStudentListener){
             super(itemView);
 
             textViewFirstName= itemView.findViewById(R.id.text_view_first_name);
             btnDelete = itemView.findViewById(R.id.button_delete);
             btnEdit = itemView.findViewById(R.id.button_eddit);
+            this.onStudentListener = onStudentListener;
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            onStudentListener.onStudentClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnStudentListener{
+        void onStudentClick(int position);
     }
 }
