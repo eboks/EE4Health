@@ -70,6 +70,11 @@ public class SettingsFragment  extends Fragment {
         studentOverviewView = inflater.inflate(R.layout.fragment_settings, container, false);
         ((MainActivity)getActivity()).initFragmentVar(studentOverviewView);
 
+        SettingsFragment fragment = (SettingsFragment) getParentFragmentManager().getFragments().get(0);
+        if(fragment == null){
+            Log.i("String", "fragment niet gevonden!");
+        }
+
         final Button disconnectButton = studentOverviewView.findViewById(R.id.disconnectButton);
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +85,7 @@ public class SettingsFragment  extends Fragment {
             }
         });
 
-        ((MainActivity)getActivity()).initEmpaticaDeviceManager();
+        ((MainActivity)getActivity()).initEmpaticaDeviceManager(fragment);
 
         return studentOverviewView;
 
@@ -96,30 +101,6 @@ public class SettingsFragment  extends Fragment {
         });
     }
 
-    /*public  void initVar(View view){
-        // Initialize vars that reference UI components
-        statusLabel = (TextView) view.findViewById(R.id.status);
-
-        dataCnt = (LinearLayout) view.findViewById(R.id.dataArea);
-
-        accel_xLabel = (TextView) view.findViewById(R.id.accel_x);
-
-        accel_yLabel = (TextView) view.findViewById(R.id.accel_y);
-
-        accel_zLabel = (TextView) view.findViewById(R.id.accel_z);
-
-        bvpLabel = (TextView) view.findViewById(R.id.bvp);
-
-        edaLabel = (TextView) view.findViewById(R.id.eda);
-
-        ibiLabel = (TextView) view.findViewById(R.id.ibi);
-
-        temperatureLabel = (TextView) view.findViewById(R.id.temperature);
-
-        batteryLabel = (TextView) view.findViewById(R.id.battery);
-
-        deviceNameLabel = (TextView) view.findViewById(R.id.deviceName);
-    }*/
 }
 
 

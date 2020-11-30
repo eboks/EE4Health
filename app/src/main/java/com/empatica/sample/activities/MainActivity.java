@@ -75,14 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m);
 
-        /*SettingsFragment fragment;
-        if (savedInstanceState != null) {
-            fragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag("customtag");
-        } else {
-            fragment = new SettingsFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.nav_settings, fragment, "customtag").commit();
-        }*/
-
         initVar();
         setSupportActionBar(toolbar);
 
@@ -136,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void initEmpaticaDeviceManager() {
+    public void initEmpaticaDeviceManager(SettingsFragment frag) {
+        fragment = frag;
         // Android 6 (API level 23) now require ACCESS_COARSE_LOCATION permission to use BLE
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this , new String[] { Manifest.permission.ACCESS_COARSE_LOCATION }, REQUEST_PERMISSION_ACCESS_COARSE_LOCATION);
@@ -273,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void didUpdateStatus(EmpaStatus status) {
         FragmentManager fm = getSupportFragmentManager();
-        SettingsFragment fragment = (SettingsFragment) fm.findFragmentById(R.id.nav_settings);
+        /*SettingsFragment fragment = (SettingsFragment) fm.findFragmentById(R.id.nav_settings);*/
 
         // Update the UI
         if(fm == null){
@@ -319,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, yay!
-                    initEmpaticaDeviceManager();
+                    initEmpaticaDeviceManager(null);
                 } else {
                     // Permission denied, boo!
                     final boolean needRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -331,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     // try again
                                     if (needRationale) {
                                         // the "never ask again" flash is not set, try again with permission request
-                                        initEmpaticaDeviceManager();
+                                        initEmpaticaDeviceManager(null);
                                     }
                                     /*else {
                                         // the "never ask again" flag is set so the permission requests is disabled, try open app settings to enable the permission
