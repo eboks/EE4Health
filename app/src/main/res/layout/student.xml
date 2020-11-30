@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_view_description"
             android:layout_below="@id/text_view_first_name"
-            android:text="Distortion"/>
+            android:text="Student"/>
 
 
     </RelativeLayout>

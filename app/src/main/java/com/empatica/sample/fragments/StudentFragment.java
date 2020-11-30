@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -25,6 +26,8 @@ public class StudentFragment  extends Fragment {
     ViewPager viewPager;
     View studentView;
 
+    Bundle bundle;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,13 +36,14 @@ public class StudentFragment  extends Fragment {
 
         textViewFullName = studentView.findViewById(R.id.text_view_full_name);
 
+        bundle = this.getArguments();
+
         viewPager = studentView.findViewById(R.id.view_pager);
         setUpViewPager(viewPager);
 
         tabLayout = studentView.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        Bundle bundle = this.getArguments();
         if (bundle != null) {
             Student student = (Student) bundle.getSerializable("student");
             Log.d(TAG,"id:"+student.getId());
@@ -51,10 +55,16 @@ public class StudentFragment  extends Fragment {
     }
 
     private void setUpViewPager(ViewPager viewPager){
-        ViewPageAdapter adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager());
+        ViewPageAdapter adapter = new ViewPageAdapter(getChildFragmentManager());
 
-        adapter.addFragment(new StudentOverviewFragment(), "OVERVIEW");
-        adapter.addFragment(new StudentNotesFragment(), "NOTES");
+        StudentNotesFragment studentNotesFragment = new StudentNotesFragment();
+        StudentOverviewFragment studentOverviewFragment = new StudentOverviewFragment();
+
+        studentOverviewFragment.setArguments(bundle);
+        studentNotesFragment.setArguments(bundle);
+
+        adapter.addFragment(studentOverviewFragment, "OVERVIEW");
+        adapter.addFragment(studentNotesFragment, "NOTES");
         viewPager.setAdapter(adapter);
     }
 

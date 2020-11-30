@@ -10,13 +10,17 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.empatica.sample.dao.MeasurementDao;
+import com.empatica.sample.dao.NoteDao;
 import com.empatica.sample.dao.StudentDao;
 import com.empatica.sample.dao.TeacherDao;
+import com.empatica.sample.models.Measurement;
+import com.empatica.sample.models.Note;
 import com.empatica.sample.models.Student;
 import com.empatica.sample.models.Teacher;
 
 
-@Database(entities = {Teacher.class, Student.class}, version = 6, exportSchema = false)
+@Database(entities = {Teacher.class, Student.class, Note.class, Measurement.class}, version = 8, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
     private static RoomDB database;
     private static String DATABASE_NAME = "database";
@@ -60,4 +64,6 @@ public abstract class RoomDB extends RoomDatabase {
 
     public abstract TeacherDao teacherDao();
     public abstract StudentDao studentDao();
+    public abstract NoteDao noteDao();
+    public abstract MeasurementDao measurementDao();
 }

@@ -61,8 +61,8 @@ public class ClassroomFragment extends Fragment implements StudentAdapter.OnStud
     @Override
     public void onStudentClick(int position) {
        // StudentOverviewFragment fragment = new StudentOverviewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", studentAdapter.getStudentAt(position).getId());
+       // Bundle bundle = new Bundle();
+        //bundle.putInt("id", studentAdapter.getStudentAt(position).getId());
         Log.d(TAG,"CLICKED"+studentAdapter.getStudentAt(position).getId());
 
 
