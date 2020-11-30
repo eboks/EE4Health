@@ -25,8 +25,13 @@ public class TeacherRepository {
 
     }
 
+/*
+    public Teacher login(String email, String password){
+        boolean contains = Arrays.stream(values).anyMatch("s"::equals);
 
-
+        return
+    }
+*/
     public void insert(Teacher teacher){
         new InsertTeacherAsyncTask(teacherDao).execute(teacher);
 
@@ -48,6 +53,21 @@ public class TeacherRepository {
 
     public LiveData<List<Teacher>> getAllTeachers(){
         return allTeachers;
+    }
+
+
+    private static class LoginTeacherAsyncTask extends AsyncTask<String, Void, Void>{
+        private TeacherDao teacherDao;
+
+        private LoginTeacherAsyncTask(TeacherDao teacherDao){
+            this.teacherDao = teacherDao;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            teacherDao.login(strings[0], strings[1]);
+            return null;
+        }
     }
 
     private static class InsertTeacherAsyncTask extends AsyncTask<Teacher, Void, Void>{

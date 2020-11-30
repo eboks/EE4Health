@@ -2,6 +2,7 @@ package com.empatica.sample.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.empatica.sample.R;
 import com.empatica.sample.database.RoomDB;
+import com.empatica.sample.fragments.StudentFragment;
+import com.empatica.sample.fragments.StudentOverviewFragment;
 import com.empatica.sample.models.Student;
 
 import java.util.ArrayList;
@@ -48,9 +52,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        Student currrentStudent = students.get(position);
-        holder.textViewFirstName.setText(currrentStudent.getFirstName());
-
+        Student currentStudent = students.get(position);
+        holder.textViewFirstName.setText(currentStudent.getFirstName()+" "+currentStudent.getLastName());
+/*
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +64,18 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            }
+        });*/
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("student", currentStudent);
+                AppCompatActivity appCompatActivity = (AppCompatActivity)view.getContext();
+                StudentFragment studentFragment = new StudentFragment();
+                studentFragment.setArguments(bundle);
+                appCompatActivity.getSupportFragmentManager().beginTransaction().replace(R.id.frame, studentFragment).addToBackStack(null).commit();
             }
         });
     }
@@ -81,15 +97,15 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textViewFirstName;
-        ImageView btnEdit, btnDelete;
+       // ImageView btnEdit, btnDelete;
         OnStudentListener onStudentListener;
 
         public ViewHolder(@NonNull View itemView, OnStudentListener onStudentListener){
             super(itemView);
 
             textViewFirstName= itemView.findViewById(R.id.text_view_first_name);
-            btnDelete = itemView.findViewById(R.id.button_delete);
-            btnEdit = itemView.findViewById(R.id.button_eddit);
+          //  btnDelete = itemView.findViewById(R.id.button_delete);
+          //  btnEdit = itemView.findViewById(R.id.button_eddit);
             this.onStudentListener = onStudentListener;
             itemView.setOnClickListener(this);
         }

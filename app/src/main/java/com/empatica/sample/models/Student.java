@@ -24,6 +24,8 @@ public class Student implements Serializable {
     @ColumnInfo(name="last_name")
     private String lastName;
 
+    private int stressLevel;
+
     public Student(String firstName, String lastName){
         this.firstName = firstName;
         this.lastName = lastName;
@@ -51,5 +53,13 @@ public class Student implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public int getStressLevel() {
+        return stressLevel;
+    }
+
+    public void setStressLevel(int stressLevel) {
+        this.stressLevel = stressLevel;
     }
 }

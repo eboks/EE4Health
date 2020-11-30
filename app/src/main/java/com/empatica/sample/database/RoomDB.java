@@ -16,7 +16,7 @@ import com.empatica.sample.models.Student;
 import com.empatica.sample.models.Teacher;
 
 
-@Database(entities = {Teacher.class, Student.class}, version = 5, exportSchema = false)
+@Database(entities = {Teacher.class, Student.class}, version = 6, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
     private static RoomDB database;
     private static String DATABASE_NAME = "database";

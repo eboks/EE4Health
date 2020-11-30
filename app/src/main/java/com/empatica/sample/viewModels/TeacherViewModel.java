@@ -23,6 +23,7 @@ public class TeacherViewModel extends AndroidViewModel {
         allTeachers = repository.getAllTeachers();
     }
 
+   // public Teacher login(String username, String password){return repository.login(username, password);}
     public void insert(Teacher teacher){
         repository.insert(teacher);
     }
