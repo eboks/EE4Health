@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,22 +56,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     SettingsFragment fragment;
 
-    private TextView accel_xLabel;
-    private TextView accel_yLabel;
-    private TextView accel_zLabel;
-    private TextView bvpLabel;
-    private TextView edaLabel;
-    private TextView ibiLabel;
-    private TextView temperatureLabel;
-    private TextView batteryLabel;
-    private TextView statusLabel;
     private TextView deviceNameLabel;
-    private LinearLayout dataCnt;
+    private TextView headertext;
+    private Button button;
+
+    boolean connected = false;
+    EmpaticaDevice bluetoothDevice;
+    String deviceName;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //getSupportFragmentManager().beginTransaction().add(R.id.nav_settings, new SettingsFragment(), "tag").commit();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m);
@@ -160,34 +156,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void didReceiveAcceleration(int x, int y, int z, double timestamp) {
-        fragment.updateLabel(accel_xLabel, "" + x);
+        /*fragment.updateLabel(accel_xLabel, "" + x);
         fragment.updateLabel(accel_yLabel, "" + y);
-        fragment.updateLabel(accel_zLabel, "" + z);
+        fragment.updateLabel(accel_zLabel, "" + z);*/
     }
 
     @Override
     public void didReceiveBVP(float bvp, double timestamp) {
-        fragment.updateLabel(bvpLabel, "" + bvp);
+        //fragment.updateLabel(bvpLabel, "" + bvp);
     }
 
     @Override
     public void didReceiveBatteryLevel(float battery, double timestamp) {
-        fragment.updateLabel(batteryLabel, String.format("%.0f %%", battery * 100));
+        //fragment.updateLabel(batteryLabel, String.format("%.0f %%", battery * 100));
     }
 
     @Override
     public void didReceiveGSR(float gsr, double timestamp) {
-        fragment.updateLabel(edaLabel, "" + gsr);
+        //fragment.updateLabel(edaLabel, "" + gsr);
+        Log.i("EDA: ", "test");
     }
 
     @Override
     public void didReceiveIBI(float ibi, double timestamp) {
-        fragment.updateLabel(ibiLabel, "" + ibi);
+        //fragment.updateLabel(ibiLabel, "" + ibi);
     }
 
     @Override
     public void didReceiveTemperature(float temp, double timestamp) {
-        fragment.updateLabel(temperatureLabel, "" + temp);
+        //fragment.updateLabel(temperatureLabel, "" + temp);
     }
 
 
@@ -204,21 +201,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
-    public void didDiscoverDevice(EmpaticaDevice bluetoothDevice, String deviceName, int rssi, boolean allowed) {
+    public void didDiscoverDevice(EmpaticaDevice bluetoothDevicel, String deviceNamel, int rssi, boolean allowed) {
+        bluetoothDevice = bluetoothDevicel;
+        deviceName = deviceNamel;
         // Check if the discovered device can be used with your API key. If allowed is always false,
         // the device is not linked with your API key. Please check your developer area at
         // https://www.empatica.com/connect/developer.php
         if (allowed) {
             // Stop scanning. The first allowed device will do.
             deviceManager.stopScanning();
-            try {
-                // Connect to the device
-                deviceManager.connectDevice(bluetoothDevice);
-                fragment.updateLabel(deviceNameLabel, "To: " + deviceName);
-            } catch (ConnectionNotAllowedException e) {
-                // This should happen only if you try to connect when allowed == false.
-                Toast.makeText(this, "Sorry, you can't connect to this device", Toast.LENGTH_SHORT).show();
-            }
+            // Connect to the device
+            fragment.updateLabel(deviceNameLabel, deviceName);
+            fragment.showbutton(button);
         }
     }
 
@@ -265,42 +259,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void didUpdateStatus(EmpaStatus status) {
-        FragmentManager fm = getSupportFragmentManager();
-        /*SettingsFragment fragment = (SettingsFragment) fm.findFragmentById(R.id.nav_settings);*/
-
-        // Update the UI
-        if(fm == null){
-            Log.i("String", "fm");
-        }
-        if(fragment == null){
-            Log.i("String", "fragment");
-        }
-        if(statusLabel == null){
-            Log.i("String", "stat");
-        }
-        if(status.name() == null){
-            Log.i("String", "name");
-        }
-        fragment.updateLabel(statusLabel, status.name());
+        //fragment.updateLabel(statusLabel, status.name());
 
         // The device manager is ready for use
         if (status == EmpaStatus.READY) {
-            fragment.updateLabel(statusLabel, status.name() + " - Turn on your device");
+            //fragment.updateLabel(statusLabel, status.name() + " - Turn on your device");
             // Start scanning
             deviceManager.startScanning();
             // The device manager has established a connection
-
-            hide();
+            fragment.updateLabel(deviceNameLabel, "No device found yet!");
+            fragment.updatebutton(button, "Connect");
+            fragment.hidebutton(button);
 
         } else if (status == EmpaStatus.CONNECTED) {
 
-            show();
+            fragment.updatebutton(button, "Disconnect");
+            fragment.updateLabel(headertext, "You are connected to:");
+            connected = true;
+            fragment.showbutton(button);
+
             // The device manager disconnected from a device
         } else if (status == EmpaStatus.DISCONNECTED) {
 
-            fragment.updateLabel(deviceNameLabel, "");
+            fragment.updateLabel(headertext, "Available Device:");
+            fragment.updateLabel(deviceNameLabel, "No device found yet!");
+            fragment.updatebutton(button, "Connect");
+            connected = false;
+            fragment.hidebutton(button);
+            deviceManager.startScanning();
 
-            hide();
         }
     }
 
@@ -354,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void run() {
 
-                dataCnt.setVisibility(View.VISIBLE);
+                //dataCnt.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -366,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void run() {
 
-                dataCnt.setVisibility(View.INVISIBLE);
+                //dataCnt.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -374,27 +361,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public  void initFragmentVar(View view){
 
         // Initialize vars that reference UI components
-        statusLabel = (TextView) view.findViewById(R.id.status);
+       deviceNameLabel = (TextView) view.findViewById(R.id.deviceName);
 
-        dataCnt = (LinearLayout) view.findViewById(R.id.dataArea);
+       headertext = (TextView) view.findViewById(R.id.connect_header);
 
-        accel_xLabel = (TextView) view.findViewById(R.id.accel_x);
+       button = (Button)view.findViewById(R.id.disconnectButton);
+    }
 
-        accel_yLabel = (TextView) view.findViewById(R.id.accel_y);
+    public void disconnectDevice(){
+        if (deviceManager != null) {
+            deviceManager.disconnect();
+        }
+    }
 
-        accel_zLabel = (TextView) view.findViewById(R.id.accel_z);
+    public void connectDevice(){
+        try {
+            // Connect to the device
+            deviceManager.connectDevice(bluetoothDevice);
+            //updateLabel(deviceNameLabel, "To: " + deviceName);
+        } catch (ConnectionNotAllowedException e) {
+            // This should happen only if you try to connect when allowed == false.
+            Toast.makeText(MainActivity.this, "Sorry, you can't connect to this device", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        bvpLabel = (TextView) view.findViewById(R.id.bvp);
-
-        edaLabel = (TextView) view.findViewById(R.id.eda);
-
-        ibiLabel = (TextView) view.findViewById(R.id.ibi);
-
-        temperatureLabel = (TextView) view.findViewById(R.id.temperature);
-
-        batteryLabel = (TextView) view.findViewById(R.id.battery);
-
-        deviceNameLabel = (TextView) view.findViewById(R.id.deviceName);
+    public boolean getconnected(){
+        return connected;
     }
 
 }

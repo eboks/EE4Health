@@ -48,20 +48,7 @@ public class SettingsFragment  extends Fragment {
     private static final int REQUEST_ENABLE_BT = 1;
 
     private EmpaDeviceManager deviceManager = null;
-
-    private TextView accel_xLabel;
-    private TextView accel_yLabel;
-    private TextView accel_zLabel;
-    private TextView bvpLabel;
-    private TextView edaLabel;
-    private TextView ibiLabel;
-    private TextView temperatureLabel;
-    private TextView batteryLabel;
-    private TextView statusLabel;
-    private TextView deviceNameLabel;
-    private LinearLayout dataCnt;
-
-
+    private TextView headertext;
 
     @Nullable
     @Override
@@ -70,18 +57,34 @@ public class SettingsFragment  extends Fragment {
         studentOverviewView = inflater.inflate(R.layout.fragment_settings, container, false);
         ((MainActivity)getActivity()).initFragmentVar(studentOverviewView);
 
+        headertext = (TextView) studentOverviewView.findViewById(R.id.connect_header);
+        boolean connected = ((MainActivity)getActivity()).getconnected();
+        if(connected){
+            updateLabel(headertext,"You are connected to:");
+        }
+        else{
+            updateLabel(headertext,"Available device:");
+        }
+
         SettingsFragment fragment = (SettingsFragment) getParentFragmentManager().getFragments().get(0);
         if(fragment == null){
             Log.i("String", "fragment niet gevonden!");
         }
 
+        Log.i("testtt", "!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         final Button disconnectButton = studentOverviewView.findViewById(R.id.disconnectButton);
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (deviceManager != null) {
-                    deviceManager.disconnect();
+                boolean connected = ((MainActivity)getActivity()).getconnected();
+                if(connected){
+                    ((MainActivity)getActivity()).disconnectDevice();
                 }
+                else{
+                    ((MainActivity)getActivity()).connectDevice();
+                }
+
             }
         });
 
@@ -97,6 +100,33 @@ public class SettingsFragment  extends Fragment {
             @Override
             public void run() {
                 label.setText(text);
+            }
+        });
+    }
+
+    public void updatebutton(final Button button, final String text) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                button.setText(text);
+            }
+        });
+    }
+
+    public void hidebutton(final Button button) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                button.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void showbutton(final Button button) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                button.setVisibility(View.VISIBLE);
             }
         });
     }
