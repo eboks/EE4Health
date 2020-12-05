@@ -42,9 +42,39 @@ import com.empatica.sample.R;
 import com.empatica.sample.database.RoomDB;
 import com.empatica.sample.fragments.SettingsFragment;
 import com.empatica.sample.models.Teacher;
+import com.fuzzylite.activation.General;
+import com.fuzzylite.defuzzifier.Centroid;
+import com.fuzzylite.norm.s.Maximum;
+import com.fuzzylite.norm.t.Minimum;
+import com.fuzzylite.rule.Rule;
+import com.fuzzylite.rule.RuleBlock;
+import com.fuzzylite.term.Gaussian;
+import com.fuzzylite.term.GaussianProduct;
+import com.fuzzylite.term.Ramp;
+import com.fuzzylite.term.Sigmoid;
+import com.fuzzylite.term.Trapezoid;
+import com.fuzzylite.term.Triangle;
+import com.fuzzylite.variable.InputVariable;
+import com.fuzzylite.variable.OutputVariable;
 import com.google.android.material.navigation.NavigationView;
 
+import com.fuzzylite.*;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EmpaDataDelegate, EmpaStatusDelegate {
+    //Define parameters of fuzzy logic here!
+    float mean_EDA_baseline= (float) 3;
+    float stdev_EDA_baseline = (float)2;
+    float mean_HR_baseline =(float) 80;
+    float stdev_HR_baseline = (float)20;
+    float mean_EDA_stress= (float)7;
+    float stdev_EDA_stress = (float)1;
+    float mean_HR_stress =(float) 120;
+    float stdev_HR_stress = (float)20;
+
+    OutputVariable stressLevel;
+    InputVariable HR;
+    Engine engine;
+
     private DrawerLayout drawer;
     Toolbar toolbar;
     RoomDB database;
@@ -95,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Teacher teacher = (Teacher) getIntent().getSerializableExtra("teacher");
         }
 
+        Log.i("testtt", "before");
+        createFuzzyModel();
+        Log.i("testtt", "after");
 
     }
 
@@ -278,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             connected = true;
             fragment.showbutton(button);
 
+
             // The device manager disconnected from a device
         } else if (status == EmpaStatus.DISCONNECTED) {
 
@@ -387,6 +421,118 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public boolean getconnected(){
         return connected;
+    }
+
+    public void createFuzzyModel(){
+        float mean_EDA_verylow = mean_EDA_baseline - 2*stdev_EDA_baseline;
+        float stdev_EDA_verylow = stdev_EDA_baseline;
+        float mean_HR_verylow = mean_HR_baseline - 2*stdev_HR_baseline;
+        float stdev_HR_verylow = stdev_HR_baseline;
+
+        float mean_EDA_medium = mean_EDA_baseline  + ((mean_EDA_stress) - (mean_EDA_baseline))/2;
+        float stdev_EDA_medium = (stdev_EDA_baseline + stdev_EDA_stress)/2;
+        float mean_HR_medium = mean_HR_baseline  + ((mean_HR_stress) - (mean_HR_baseline))/2;
+        float stdev_HR_medium = (stdev_HR_baseline + stdev_HR_stress)/2;
+
+        float mean_EDA_veryhigh = mean_EDA_stress + 2*stdev_EDA_stress;
+        float stdev_EDA_veryhigh = stdev_EDA_stress;
+        float mean_HR_veryhigh = mean_HR_stress + 2*stdev_HR_stress;
+        float stdev_HR_veryhigh = stdev_HR_stress;
+
+
+        engine = new Engine();
+        engine.setName("StressCalculator");
+        engine.setDescription("");
+
+        //Input functions
+        //HR
+        HR = new InputVariable();
+        HR.setName("HR");
+        HR.setDescription("");
+        HR.setEnabled(true);
+        HR.setRange(20.0, 200.0);
+        HR.setLockValueInRange(false);
+
+        //HR.addTerm(new GaussianProduct("hvery_low", 0, 0.1, mean_HR_verylow, stdev_HR_verylow));
+        HR.addTerm(new Trapezoid("hvery_low", 20, 20.1, mean_HR_verylow, mean_HR_baseline));
+        HR.addTerm(new Gaussian("hlow", mean_HR_baseline, stdev_HR_baseline));
+        HR.addTerm(new Gaussian("hmedium", mean_HR_medium, stdev_HR_medium));
+        HR.addTerm(new Gaussian("hhigh", mean_HR_stress, stdev_HR_stress));
+        //HR.addTerm(new GaussianProduct("hvery_high", mean_HR_veryhigh, stdev_HR_veryhigh, 20, 0.1));
+        HR.addTerm(new Trapezoid("hvery_high", mean_HR_stress, mean_HR_veryhigh, 200, 200.1));
+
+        engine.addInputVariable(HR);
+
+
+        //EDA
+        InputVariable EDA = new InputVariable();
+        EDA.setName("EDA");
+        EDA.setDescription("");
+        EDA.setRange(0.000, 10);
+        EDA.setLockValueInRange(false);
+
+        //EDA.addTerm(new GaussianProduct("very_low", -2, 0.1, mean_EDA_verylow, stdev_EDA_verylow));
+        EDA.addTerm(new Trapezoid("very_low", 0, 0.001, mean_EDA_verylow, mean_EDA_baseline));
+        EDA.addTerm(new Gaussian("low", mean_EDA_baseline, stdev_EDA_baseline));
+        EDA.addTerm(new Gaussian("medium", mean_EDA_medium, stdev_EDA_medium));
+        EDA.addTerm(new Gaussian("high", mean_EDA_stress, stdev_EDA_stress));
+        //EDA.addTerm(new GaussianProduct("very_high", mean_EDA_veryhigh, stdev_EDA_veryhigh, 20, 0.1));
+        EDA.addTerm(new Trapezoid("very_high", mean_EDA_stress, mean_EDA_veryhigh, 20, 20.01));
+
+        engine.addInputVariable(EDA);
+
+        //Output functions
+        stressLevel = new OutputVariable();
+        stressLevel.setName("stressLevel");
+        stressLevel.setDescription("");
+        stressLevel.setEnabled(true);
+        stressLevel.setRange(0.000, 1);
+        stressLevel.setLockValueInRange(false);
+        stressLevel.setAggregation(new Maximum());
+        stressLevel.setDefuzzifier(new Centroid(200));
+        stressLevel.setDefaultValue(Double.NaN);
+        stressLevel.setLockPreviousValue(false);
+
+        stressLevel.addTerm(new Triangle("Very_low_stress", 0.0, 0.0, 0.25));
+        stressLevel.addTerm(new Triangle("Low_stress", 0.0, 0.25, 0.5));
+        stressLevel.addTerm(new Triangle("Medium_stress", 0.25, 0.5, 0.75));
+        stressLevel.addTerm(new Triangle("High_stress", 0.5, 0.75, 1.0));
+        stressLevel.addTerm(new Triangle("Very_high_stress", 0.75, 1.000, 1.001));
+
+        engine.addOutputVariable(stressLevel);
+
+        //Rules
+        RuleBlock ruleBlock = new RuleBlock();
+        ruleBlock.setName("");
+        ruleBlock.setDescription("");
+        ruleBlock.setEnabled(true);
+        ruleBlock.setConjunction(new Minimum());
+        ruleBlock.setDisjunction(new Maximum());
+        ruleBlock.setImplication(new Minimum());
+        ruleBlock.setActivation(new General());
+
+        ruleBlock.addRule(Rule.parse("if HR is hvery_low and EDA is very_low then stressLevel is Very_low_stress", engine));
+        ruleBlock.addRule(Rule.parse("if HR is hlow and EDA is low then stressLevel is Low_stress", engine));
+        ruleBlock.addRule(Rule.parse("if HR is hmedium and EDA is medium then stressLevel is Medium_stress", engine));
+        ruleBlock.addRule(Rule.parse("if HR is hhigh and EDA is high then stressLevel is High_stress", engine));
+        ruleBlock.addRule(Rule.parse("if HR is hvery_high and EDA is very_high then stressLevel is Very_high_stress", engine));
+
+        engine.addRuleBlock(ruleBlock);
+
+        //TESTING
+        /*
+        for (int i = 0; i <= 50; ++i) {
+            float rate = (float) (HR.getMinimum() + i * (HR.range() / 50));
+            float skin = (float) (EDA.getMinimum() + i * (EDA.range() / 50));
+            HR.setValue(rate);
+            EDA.setValue(skin);
+            engine.process();
+            Log.i("outcome:", "HR = "+Op.str(rate)+" and EDA "+Op.str(skin)+" -> stresslevel = "+Op.str(stressLevel.getValue())+ "");
+        }*/
+    }
+
+    public void computeStress(){
+
     }
 
 }
