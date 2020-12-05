@@ -115,9 +115,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             super(itemView);
             mCardView = (CardView)  itemView.findViewById(R.id.student_card);
             textViewFirstName= itemView.findViewById(R.id.text_view_first_name);
-           // Timer timer = new Timer();
-           // MyTimer myTimer = new MyTimer();
-            //timer.schedule(myTimer, 2000, 2000);
+            Timer timer = new Timer();
+            MyTimer myTimer = new MyTimer();
+            timer.schedule(myTimer, 2000, 2000);
             this.onStudentListener = onStudentListener;
             itemView.setOnClickListener(this);
         }
@@ -127,7 +127,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             onStudentListener.onStudentClick(getAdapterPosition());
         }
 
-      /*  private class MyTimer extends TimerTask {
+        private class MyTimer extends TimerTask {
             @Override
             public void run() {
 
@@ -145,7 +145,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                     }
                 }).start();
             }
-        }*/
+        }
     }
 
     public interface OnStudentListener{
