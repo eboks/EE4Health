@@ -61,6 +61,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import com.fuzzylite.*;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EmpaDataDelegate, EmpaStatusDelegate {
     //Define parameters of fuzzy logic here!
     float mean_EDA_baseline= (float) 3;
@@ -72,10 +74,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     float mean_HR_stress =(float) 120;
     float stdev_HR_stress = (float)20;
 
+    //fuzzy variables
     OutputVariable stressLevel;
     InputVariable HR;
+    InputVariable EDA;
     Engine engine;
+    ArrayList<Float> HR_list =  new ArrayList<Float>();
+    ArrayList<Float> EDA_list =  new ArrayList<Float>();
+    float meanHR = 70; //in case the watch isn't on the wrist at start
+    float meanEDA;
+    int counter = 0;
 
+    //layout
     private DrawerLayout drawer;
     Toolbar toolbar;
     RoomDB database;
@@ -210,12 +220,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void didReceiveGSR(float gsr, double timestamp) {
         //fragment.updateLabel(edaLabel, "" + gsr);
-        Log.i("EDA: ", "test");
+        EDA_list.add(gsr);
+        counter++;
+        if(counter == 20){
+            if(HR_list.size()!=0){  //there is not always a heart beat detected, take HR of previous if that's the case
+                meanHR = mean(HR_list);
+            }
+            meanEDA = mean(EDA_list);
+            HR_list.clear();
+            EDA_list.clear();
+            computeStress();
+            counter = 0;
+        }
     }
 
     @Override
     public void didReceiveIBI(float ibi, double timestamp) {
         //fragment.updateLabel(ibiLabel, "" + ibi);
+        HR_list.add(60/ibi);
     }
 
     @Override
@@ -468,7 +490,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //EDA
-        InputVariable EDA = new InputVariable();
+        EDA = new InputVariable();
         EDA.setName("EDA");
         EDA.setDescription("");
         EDA.setRange(0.000, 10);
@@ -535,7 +557,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void computeStress(){
+        HR.setValue(meanHR);
+        EDA.setValue(meanEDA);
+        engine.process();
+        Log.i("outcome:", "HR = "+Op.str(meanHR)+" and EDA "+Op.str(meanEDA)+" -> stresslevel = "+Op.str(stressLevel.getValue())+ "");
+    }
 
+    public static float mean (ArrayList<Float> table)
+    {
+        float total = 0;
+
+        for ( int i= 0;i < table.size(); i++)
+        {
+            float currentNum = table.get(i);
+            total+= currentNum;
+        }
+        return total/table.size();
     }
 
 }
