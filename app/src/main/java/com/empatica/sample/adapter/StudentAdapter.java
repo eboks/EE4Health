@@ -2,6 +2,7 @@ package com.empatica.sample.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -44,10 +45,12 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     private RoomDB database;
     private OnStudentListener mOnStudentListener;
     private Student currentStudent;
+    private Context mContext;
 
 
-    public StudentAdapter( OnStudentListener onStudentListener){
+    public StudentAdapter( OnStudentListener onStudentListener, Context context){
         this.mOnStudentListener = onStudentListener;
+        this.mContext = context;
         /**/
 
 
@@ -134,13 +137,30 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if(currentStudent.getStressLevel()==0){
-                            mCardView.setCardBackgroundColor(Color.GREEN);
-                            currentStudent.setStressLevel(1);
-                        }
-                        else {
-                            mCardView.setCardBackgroundColor(Color.RED);
-                            currentStudent.setStressLevel(0);
+                        if (mContext instanceof MainActivity) {
+                            float stresslevel = ((MainActivity) mContext).getStress();
+                            if(stresslevel<0.2){
+                                mCardView.setCardBackgroundColor(Color.CYAN);
+                            }
+                            else if(stresslevel <0.4){
+                                mCardView.setCardBackgroundColor(Color.GREEN);
+                            }
+                            else if(stresslevel < 0.6){
+                                mCardView.setCardBackgroundColor(Color.YELLOW);
+                            }
+                            else if(stresslevel < 0.8){
+                                mCardView.setCardBackgroundColor(Color.RED);
+                            }
+                            else{
+                                mCardView.setCardBackgroundColor(Color.BLACK);
+                            }
+                            /*if (currentStudent.getStressLevel() == 0) {
+                                mCardView.setCardBackgroundColor(Color.GREEN);
+                                currentStudent.setStressLevel(1);
+                            } else {
+                                mCardView.setCardBackgroundColor(Color.RED);
+                                currentStudent.setStressLevel(0);
+                            }*/
                         }
                     }
                 }).start();

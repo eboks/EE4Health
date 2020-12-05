@@ -65,13 +65,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EmpaDataDelegate, EmpaStatusDelegate {
     //Define parameters of fuzzy logic here!
-    float mean_EDA_baseline= (float) 3;
-    float stdev_EDA_baseline = (float)2;
+    float mean_EDA_baseline= (float) 0.04;
+    float stdev_EDA_baseline = (float)0.05;
     float mean_HR_baseline =(float) 80;
     float stdev_HR_baseline = (float)20;
-    float mean_EDA_stress= (float)7;
-    float stdev_EDA_stress = (float)1;
-    float mean_HR_stress =(float) 120;
+    float mean_EDA_stress= (float)0.15;
+    float stdev_EDA_stress = (float)0.15;
+    float mean_HR_stress =(float) 110;
     float stdev_HR_stress = (float)20;
 
     //fuzzy variables
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ArrayList<Float> EDA_list =  new ArrayList<Float>();
     float meanHR = 70; //in case the watch isn't on the wrist at start
     float meanEDA;
+    float stress;
     int counter = 0;
 
     //layout
@@ -220,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void didReceiveGSR(float gsr, double timestamp) {
         //fragment.updateLabel(edaLabel, "" + gsr);
+        Log.i("EDA: ", Op.str(gsr));
         EDA_list.add(gsr);
         counter++;
         if(counter == 20){
@@ -560,6 +562,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HR.setValue(meanHR);
         EDA.setValue(meanEDA);
         engine.process();
+        stress = (float)stressLevel.getValue();
         Log.i("outcome:", "HR = "+Op.str(meanHR)+" and EDA "+Op.str(meanEDA)+" -> stresslevel = "+Op.str(stressLevel.getValue())+ "");
     }
 
@@ -573,6 +576,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             total+= currentNum;
         }
         return total/table.size();
+    }
+
+    public float getStress(){
+        return stress;
     }
 
 }

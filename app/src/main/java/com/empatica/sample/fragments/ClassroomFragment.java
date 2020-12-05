@@ -43,7 +43,7 @@ public class ClassroomFragment extends Fragment implements StudentAdapter.OnStud
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        studentAdapter = new StudentAdapter(this::onStudentClick);
+        studentAdapter = new StudentAdapter(this::onStudentClick, getContext());
         recyclerView.setAdapter(studentAdapter);
 
 
