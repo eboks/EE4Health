@@ -120,7 +120,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             textViewFirstName= itemView.findViewById(R.id.text_view_first_name);
             Timer timer = new Timer();
             MyTimer myTimer = new MyTimer();
-            timer.schedule(myTimer, 2000, 2000);
+            timer.schedule(myTimer, 2000, 5000);
             this.onStudentListener = onStudentListener;
             itemView.setOnClickListener(this);
         }
