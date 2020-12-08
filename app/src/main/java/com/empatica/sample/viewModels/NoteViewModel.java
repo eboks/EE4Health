@@ -28,6 +28,11 @@ public class NoteViewModel extends AndroidViewModel {
         repository.insert(note);
     }
 
+    public void update(Note note){
+        repository.update(note);
+    }
+
+
     public List<Note> getNotesForStudent(int studentId){
         List<Note> studentNotes = repository.findNotesForStudent(studentId);
         return studentNotes;
@@ -35,5 +40,8 @@ public class NoteViewModel extends AndroidViewModel {
 
     public LiveData<List<Note>> getAllNotes(){
         return allNotes;
+    }
+
+    public void delete(Note note) { repository.delete(note);
     }
 }

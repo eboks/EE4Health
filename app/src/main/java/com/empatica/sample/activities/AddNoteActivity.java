@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AddNoteActivity extends AppCompatActivity {
+    public static final String EXTRA_ID = "com.empatica.sample.activities.EXTRA_ID";
+
     public static final String EXTRA_TITLE = "com.empatica.sample.activities.EXTRA_TITLE";
     public static final String EXTRA_DESCRIPTION = "com.empatica.sample.activities.EXTRA_DESCRIPTION";
     public static final String EXTRA_TIMESTAMP = "com.empatica.sample.activities.EXTRA_TIMESTAMP";
@@ -37,7 +39,18 @@ public class AddNoteActivity extends AppCompatActivity {
         initVar();
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-        setTitle("Add Note");
+
+        Intent intent = getIntent();
+
+        if(intent.hasExtra(EXTRA_ID)){
+            setTitle("Edit Note");
+            editTitle.setText(intent.getStringExtra(EXTRA_TITLE));
+            editContent.setText((intent.getStringExtra(EXTRA_DESCRIPTION)));
+            textDateTime.setText(intent.getStringExtra(EXTRA_TIMESTAMP));
+        }
+        else {
+            setTitle("Add Note");
+        }
     }
 
     private void saveNote(){
@@ -59,6 +72,11 @@ public class AddNoteActivity extends AppCompatActivity {
         data.putExtra(EXTRA_TITLE, noteTitle);
         data.putExtra(EXTRA_DESCRIPTION, noteContent);
         data.putExtra(EXTRA_TIMESTAMP, dateTime);
+
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+        if(id != -1){
+            data.putExtra(EXTRA_ID, id);
+        }
         setResult(RESULT_OK, data);
         finish();
 

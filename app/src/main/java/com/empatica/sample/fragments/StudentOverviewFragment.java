@@ -29,14 +29,14 @@ public class StudentOverviewFragment  extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         studentOverviewView = inflater.inflate(R.layout.fragment_student_overview, container, false);
-        textView = studentOverviewView.findViewById(R.id.dummy);
+       // textView = studentOverviewView.findViewById(R.id.dummy);
 
         Bundle bundle = this.getArguments();
 
         if (bundle != null) {
             Student student = (Student) bundle.getSerializable("student");
             Log.d(TAG,"overview calling id:"+student.getId());
-            textView.setText(student.getFirstName()+" "+student.getLastName());
+           // textView.setText(student.getFirstName()+" "+student.getLastName());
         }
 
         return studentOverviewView;

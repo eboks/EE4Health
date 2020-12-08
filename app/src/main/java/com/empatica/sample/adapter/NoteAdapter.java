@@ -31,6 +31,7 @@ import static android.content.ContentValues.TAG;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
     protected List<Note> notes = new ArrayList<>();
+    private OnItemClickListener listener;
 
 
     @NonNull
@@ -73,6 +74,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
             textViewTitle = itemView.findViewById(R.id.text_view_note_title);
            // this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION){
+                        listener.onItemClick(notes.get(position));
+                    }
+
+                }
+            });
         }
 
         @Override
@@ -94,6 +105,15 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
         return notes.get(position);
     }
 
+
+    public interface OnItemClickListener {
+        void onItemClick(Note note);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+
+    }
 
 
 }

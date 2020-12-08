@@ -3,13 +3,139 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:gravity="center_horizontal"
+
     >
 
-    <TextView
-        android:id="@+id/dummy"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="SEE info"/>
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:orientation="vertical">
+        <!--
+        <TextView
+            android:id="@+id/dummy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="SEE info"
+            />-->
+
+        <LinearLayout
+
+android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Device status:"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="connected"/>
+
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_online" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Age:"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="'?'"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Dislikes:"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="'?'"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Last Attack:"
+                android:textColor="@android:color/black"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="'??/??/???? at ??:??'"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
 
 
 
