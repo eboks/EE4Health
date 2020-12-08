@@ -1,6 +1,8 @@
 package com.empatica.sample.adapter;
 
+
 import android.app.Activity;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -112,6 +114,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         TextView textViewFirstName;
         OnStudentListener onStudentListener;
 
+
         public ViewHolder(@NonNull View itemView, OnStudentListener onStudentListener){
             super(itemView);
             mCardView = (CardView)  itemView.findViewById(R.id.student_card);
@@ -138,7 +141,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                         if (mContext instanceof MainActivity) {
                             float stresslevel = ((MainActivity) mContext).getStress();
                             if(stresslevel<0.2){
-                                mCardView.setCardBackgroundColor(Color.CYAN);
+                                mCardView.setCardBackgroundColor(Color.parseColor("#006400"));
                             }
                             else if(stresslevel <0.4){
                                 mCardView.setCardBackgroundColor(Color.GREEN);
@@ -147,10 +150,10 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                                 mCardView.setCardBackgroundColor(Color.YELLOW);
                             }
                             else if(stresslevel < 0.8){
-                                mCardView.setCardBackgroundColor(Color.RED);
+                                mCardView.setCardBackgroundColor(Color.parseColor("#FFA500"));
                             }
                             else{
-                                mCardView.setCardBackgroundColor(Color.BLACK);
+                                mCardView.setCardBackgroundColor(Color.RED);
                             }
                             /*if (currentStudent.getStressLevel() == 0) {
                                 mCardView.setCardBackgroundColor(Color.GREEN);

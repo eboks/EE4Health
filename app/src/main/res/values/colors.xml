@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#233C67</color>
     <color name="colorPrimaryLight">#CCDBEE</color>
     <color name="colorSecondary">#FFDDD3</color>
+    <color name="ORANGE">#FFA500</color>
 </resources>
