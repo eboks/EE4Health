@@ -48,12 +48,9 @@ public class ClassroomFragment extends Fragment implements StudentAdapter.OnStud
 
 
         studentViewModel = ViewModelProviders.of(this).get(StudentViewModel.class);
-        studentViewModel.getAllStudents().observe(getViewLifecycleOwner(), new Observer<List<Student>>(){
-            @Override
-            public void onChanged(List<Student> students) {
-                //update RecyclerView
-                studentAdapter.setStudents(students);
-            }
+        studentViewModel.getAllStudents().observe(getViewLifecycleOwner(), students -> {
+            //update RecyclerView
+            studentAdapter.setStudents(students);
         });
         return classroomView;
     }

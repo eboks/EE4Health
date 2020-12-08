@@ -3,6 +3,7 @@ package com.empatica.sample.models;
 
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -16,6 +17,8 @@ public class Student implements Serializable {
 
     //Create id column
     @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "student_id")
     private int id;
 
     @ColumnInfo(name="first_name")

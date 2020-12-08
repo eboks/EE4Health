@@ -13,7 +13,7 @@ import java.util.List;
 
 @Dao
 public interface MeasurementDao {
-    @Query("SELECT * FROM measurement ORDER BY id DESC")
+    @Query("SELECT * FROM measurement ORDER BY measurement_id DESC")
     List<Measurement> getAllMeasurements();
 
     @Query("SELECT * FROM measurement WHERE student_id=:studentId")

@@ -1,5 +1,6 @@
 package com.empatica.sample.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -11,13 +12,15 @@ import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "measurement",
         foreignKeys = @ForeignKey(entity = Student.class,
-        parentColumns = "id",
-        childColumns = "student_id",
+        parentColumns = "student_id",
+        childColumns = "measurement_id",
         onDelete = CASCADE))
 public class Measurement implements Serializable {
 
     //Create id column
     @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "measurement_id")
     private int id;
 
     @ColumnInfo(name="date_time")

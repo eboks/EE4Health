@@ -36,6 +36,6 @@ public interface StudentDao {
     @Query("DELETE FROM student")
     void deleteAllStudents();
 
-    @Query("UPDATE student SET first_name = :sText WHERE ID = :sID")
+    @Query("UPDATE student SET first_name = :sText WHERE student_id = :sID")
     void update(int sID, String sText);
 }

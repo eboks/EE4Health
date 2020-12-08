@@ -1,5 +1,6 @@
 package com.empatica.sample.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -9,27 +10,40 @@ import java.io.Serializable;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "note", foreignKeys = @ForeignKey(entity = Student.class,
-        parentColumns = "id",
-        childColumns = "student_id",
-        onDelete = CASCADE))
+@Entity(tableName = "note")
+
+        /*foreignKeys = @ForeignKey(entity = Student.class,
+        parentColumns = "student_id",
+        childColumns = "note_id",
+        onDelete = CASCADE))*/
 public class Note implements Serializable {
 
     //Create id column
     @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "note_id")
     private int id;
 
+
     @ColumnInfo(name="title")
-    private String firstName;
+    private String noteTitle;
 
     @ColumnInfo(name="date_time")
     private String dateTime;
 
-    @ColumnInfo(name = "note_text")
-    private String noteText;
+    @ColumnInfo(name = "note_content")
+    private String noteContent;
 
     @ColumnInfo(name="student_id")
     public int studentId;
+
+    public Note(){}
+
+    public Note(String noteTitle, String noteContent, String datetime){
+        this.noteTitle = noteTitle;
+        this.noteContent = noteContent;
+        this.dateTime = datetime;
+    }
 
     public int getId() {
         return id;
@@ -39,12 +53,12 @@ public class Note implements Serializable {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getNoteTitle() {
+        return noteTitle;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setNoteTitle(String noteTitle) {
+        this.noteTitle = noteTitle;
     }
 
     public String getDateTime() {
@@ -55,13 +69,14 @@ public class Note implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public String getNoteText() {
-        return noteText;
+    public String getNoteContent() {
+        return noteContent;
     }
 
-    public void setNoteText(String noteText) {
-        this.noteText = noteText;
+    public void setNoteContent(String noteContent) {
+        this.noteContent = noteContent;
     }
+
 
     public int getStudentId() {
         return studentId;

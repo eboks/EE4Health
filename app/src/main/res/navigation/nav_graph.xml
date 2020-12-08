@@ -39,5 +39,12 @@
         <action
             android:id="@+id/action_studentNotesFragment_to_studentOverviewFragment"
             app:destination="@id/student_card" />
+        <action
+            android:id="@+id/action_studentNotesFragment_to_addNoteFragment"
+            app:destination="@id/addNoteFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addNoteFragment"
+        android:name="com.empatica.sample.fragments.AddNoteFragment"
+        android:label="AddNoteFragment" />
 </navigation>

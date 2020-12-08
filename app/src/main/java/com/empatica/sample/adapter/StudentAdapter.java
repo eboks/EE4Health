@@ -51,8 +51,6 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     public StudentAdapter( OnStudentListener onStudentListener, Context context){
         this.mOnStudentListener = onStudentListener;
         this.mContext = context;
-        /**/
-
 
     }
 
