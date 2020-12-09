@@ -2,6 +2,7 @@ package com.empatica.sample.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -154,14 +155,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if ( getSupportFragmentManager().getBackStackEntryCount() > 0)
-        {
+        if ( getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-        }
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        } else if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else{
+        } else{
             super.onBackPressed();
         }
     }
@@ -581,5 +579,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public float getStress(){
         return stress;
     }
+
+
 
 }
