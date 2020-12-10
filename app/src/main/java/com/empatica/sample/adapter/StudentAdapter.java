@@ -30,6 +30,7 @@ import com.empatica.sample.activities.MainActivity;
 import com.empatica.sample.database.RoomDB;
 import com.empatica.sample.fragments.StudentFragment;
 import com.empatica.sample.fragments.StudentOverviewFragment;
+import com.empatica.sample.models.Note;
 import com.empatica.sample.models.Student;
 import com.empatica.sample.models.Teacher;
 
@@ -141,10 +142,10 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                         if (mContext instanceof MainActivity) {
                             float stresslevel = ((MainActivity) mContext).getStress();
                             if(stresslevel<0.2){
-                                mCardView.setCardBackgroundColor(Color.parseColor("#006400"));
+                                mCardView.setCardBackgroundColor(Color.GREEN);
                             }
                             else if(stresslevel <0.4){
-                                mCardView.setCardBackgroundColor(Color.GREEN);
+                                mCardView.setCardBackgroundColor(Color.parseColor("#AAF200"));
                             }
                             else if(stresslevel < 0.6){
                                 mCardView.setCardBackgroundColor(Color.YELLOW);
@@ -172,6 +173,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     public interface OnStudentListener{
         void onStudentClick(int position);
     }
+
+
 
 
 
